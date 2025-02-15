@@ -1,27 +1,38 @@
 /* eslint-disable no-console */
 import chalk from 'chalk'
 
-import { isProduction } from './environment/publicVariables'
+import { LogLevel, logLevels } from '@/types/definitions/logLevel'
 
-const voidCallback = (): void => {}
+import { currentLogLevel, isProduction } from './environment/publicVariables'
 
-const logger = {
-  debug: isProduction
-    ? voidCallback
-    : (...args: unknown[]): void => console.debug(chalk.magenta('[DEBUG]', ...args)),
-  info: isProduction
-    ? voidCallback
-    : (...args: unknown[]): void => console.info(chalk.blue('[INFO]', ...args)),
-  warn: isProduction
-    ? voidCallback
-    : (...args: unknown[]): void => console.warn(chalk.yellow('[WARN]', ...args)),
-  error: (...args: unknown[]): void => console.error(chalk.red('[ERROR]'), ...args),
-  errorUnknown: (label: string = 'Unknown error: ', error: unknown): void =>
-    console.error(
-      chalk.red('[ERROR]'),
-      label,
-      error instanceof Error ? error.message : JSON.stringify(error),
-    ),
-} as const
+const shouldLog = (messageLevel: LogLevel) => logLevels[messageLevel] <= logLevels[currentLogLevel]
 
-export default logger
+const safeStringify = (data: unknown): string => {
+  if (typeof data === 'string') return data
+  try {
+    return JSON.stringify(data, null, 2)
+  } catch {
+    return '[Unserializable data]'
+  }
+}
+
+const stringifyArgs = (...args: unknown[]): string[] =>
+  args.map(arg => chalk(typeof arg === 'string' ? arg : safeStringify(arg)))
+
+export const logger = {
+  debug:
+    isProduction || !shouldLog('level3debug')
+      ? () => {}
+      : (...args: unknown[]): void => console.debug(chalk.magenta('[DEBUG]', ...stringifyArgs(...args))),
+  info:
+    isProduction || !shouldLog('level2info')
+      ? () => {}
+      : (...args: unknown[]): void => console.info(chalk.blue('[INFO]', ...stringifyArgs(...args))),
+  warn:
+    isProduction || !shouldLog('level1warn')
+      ? () => {}
+      : (...args: unknown[]): void => console.warn(chalk.yellow('[WARN]', ...stringifyArgs(...args))),
+  error: !shouldLog('level0error')
+    ? () => {}
+    : (...args: unknown[]): void => console.error(chalk.red('[ERROR]', ...stringifyArgs(...args))),
+}
