@@ -5,30 +5,31 @@ import { productionBaseURL } from '@/library/environment/publicVariables'
 import Providers from '@/components/Providers'
 
 import './styles.tailwind.css'
+import type { ReactNode } from 'react'
 
 export const metadata: Metadata = {
-  title: `My Site`,
-  description: `Site description`,
-  alternates: {
-    canonical: productionBaseURL,
-  },
+	title: 'My Site',
+	description: 'Site description',
+	alternates: {
+		canonical: productionBaseURL,
+	},
 }
 
 export const viewport: Viewport = {
-  initialScale: 1,
-  width: 'device-width',
+	initialScale: 1,
+	width: 'device-width',
 }
 
 export default function RootLayout({
-  children,
+	children,
 }: Readonly<{
-  children: React.ReactNode
+	children: ReactNode
 }>) {
-  return (
-    <html lang="en-GB" suppressHydrationWarning>
-      <body>
-        <Providers>{children}</Providers>
-      </body>
-    </html>
-  )
+	return (
+		<html lang="en-GB" suppressHydrationWarning>
+			<body>
+				<Providers>{children}</Providers>
+			</body>
+		</html>
+	)
 }

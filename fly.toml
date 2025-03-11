@@ -1,20 +1,27 @@
-app = 'CHANGE_ME_OR_ERROR'
+# fly.toml app configuration file generated for dan-logger-test on 2025-02-15T22:26:17Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'dan-logger-test'
 primary_region = 'lhr'
 
-[http_service]
-internal_port = 3000
-force_https = true
-auto_start_machines = true
-auto_stop_machines = 'stop'
-min_machines_running = 0
-processes = ['app']
+[build]
 
-[[vm]]
-memory = '1gb'
-cpu_kind = 'shared'
-cpus = 1
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
 
 [[restart]]
-policy = 'on-failure'
-retries = 1
-processes = ['app']
+  policy = 'on-failure'
+  retries = 1
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1

@@ -1,10 +1,10 @@
-import { AuthenticationMessages, BasicMessages } from './responseMessages'
+import type { AuthenticationMessages, BasicMessages } from './responseMessages'
 
 export interface ExamplePOSTbody {
-  password: string
-  staySignedIn: boolean
+	password: string
+	staySignedIn: boolean
 }
 
 export interface ExamplePOSTresponse {
-  message: BasicMessages | AuthenticationMessages
+	message: BasicMessages | AuthenticationMessages
 }

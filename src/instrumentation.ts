@@ -1,10 +1,10 @@
-import logger from './library/logger'
+// import { logLevel } from './library/environment/serverVariables'
+// import { logger, logLevels } from './library/logger'
 
-import { isDevelopment } from './library/environment/publicVariables'
-
-export function register() {
-  if (isDevelopment) {
-    logger.info(`register function from src/instrumentation called`)
-    // testDatabaseConnection() etc.
-  }
-}
+// export function register() {
+//   if (!(logLevel in logLevels)) {
+//     console.error('LOG_LEVEL invalid: ', logLevel)
+//   } else {
+//     logger.info('Log level: ', logLevel)
+//   }
+// }
